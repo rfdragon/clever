@@ -1,5 +1,5 @@
 # clever
-Lista de Contatos CRUD Laravel + Vue.JS
+Contact List CRUD Laravel + Vue.JS
 
 
 In this project I have done the next points:
