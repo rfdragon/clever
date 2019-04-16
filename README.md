@@ -15,3 +15,4 @@ In this project I have done the next points:
 - Add and configure Laravel Passport for API Auth (https://laravel.com/docs/5.8/passport)
 - Use Base64 Encoding for upload files (photo)
 - Use Image Intervention (http://image.intervention.io/) for edit files (photo)
+- Use Authorization Gates (https://laravel.com/docs/5.8/authorization#gates) for user permissions
