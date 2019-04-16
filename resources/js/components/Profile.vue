@@ -135,7 +135,14 @@
         },
         methods: {
             getProfilePhoto() {
-                return "img/profile/" + this.form.photo;
+
+                if(!this.form.photo) {
+                    return 'img/profile/profile.png';
+                }
+
+                let photo = (this.form.photo.length > 200) ? this.form.photo : "img/profile/" + this.form.photo;
+
+                return photo;
             },
             updatePhoto(e) {
                 let file = e.target.files[0];

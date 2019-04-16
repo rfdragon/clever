@@ -8,6 +8,10 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+// import my Gate.js class
+import Gate from './Gate';
+Vue.prototype.$gate = new Gate(window.user);
+
 // momentJS
 import moment from 'moment'
 
@@ -79,6 +83,8 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 Vue.component('passport-clients', require('./components/passport/Clients.vue').default);
 Vue.component('passport-authorized-clients', require('./components/passport/AuthorizedClients.vue').default);
 Vue.component('passport-personal-access-tokens', require('./components/passport/PersonalAccessTokens.vue').default);
+
+Vue.component('not-found', require('./components/NotFound.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

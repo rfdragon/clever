@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div class="row mt-5">
+        <div class="row mt-5" v-if="$gate.isAdminOrAuthor()">
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
@@ -41,6 +41,10 @@
                 </div>
                 <!-- /.card -->
             </div>
+        </div>
+
+        <div v-if="!$gate.isAdminOrAuthor()">
+            <not-found></not-found>
         </div>
 
         <!-- Modal -->
@@ -140,7 +144,9 @@
                 $('#addNew').modal('show');
             },
             loadUsers() {
-                axios.get('api/user').then(({data})=>(this.users = data.data));
+                if(this.$gate.isAdminOrAuthor()) {
+                    axios.get('api/user').then(({data})=>(this.users = data.data));
+                }
             },
             deleteUser(id) {
                 Swal.fire({

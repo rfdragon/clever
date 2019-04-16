@@ -26,7 +26,11 @@ class UserController extends Controller
      */
     public function index()
     {
-        return User::latest()->paginate(10);
+
+        if (\Gate::allows('isAdmin') || \Gate::allows('isAuthor')) {
+            return User::latest()->paginate(30);
+        }
+
     }
 
     /**
@@ -109,7 +113,7 @@ class UserController extends Controller
            $userPhoto = public_path('img/profile/').$currentPhoto;
 
            // delete old picture from server
-           if(file_exists($userPhoto)) {
+           if(file_exists($userPhoto) && $currentPhoto !== 'profile.png') {
                @unlink($userPhoto);
            }
 
@@ -161,6 +165,9 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
+
+        $this->authorize('isAdmin');
+
         $user = User::findOrFail($id);
 
         // delete the user
