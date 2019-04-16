@@ -4,9 +4,18 @@
 
 // Variables
 @import 'variables';
+$fa-font-path: '../webfonts';
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+
+// AdminLTE 3.0.0
+@import '~admin-lte/dist/css/adminlte.css';
+
+// Fontawesome
+@import '~@fortawesome/fontawesome-free/scss/fontawesome.scss';
+@import '~@fortawesome/fontawesome-free/scss/solid.scss';
+@import '~@fortawesome/fontawesome-free/scss/brands.scss';
 
 // Toastr
 @import '~toastr/toastr';
@@ -15,3 +24,21 @@
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
+
+.router-link-exact-active {
+    background-color: #3f51b5;
+    color: #fff !important;
+}
+
+.blue { color: $blue; }
+.indigo { color: $indigo; }
+.purple { color: $purple; }
+.pink { color: $pink; }
+.red { color: $red; }
+.orange { color: $orange; }
+.yellow { color: $yellow; }
+.green { color: $green; }
+.teal { color: $teal; }
+.cyan { color: $cyan; }
+
+.strong { font-weight: bold; }
