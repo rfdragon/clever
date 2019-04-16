@@ -12,4 +12,5 @@ In this project I have done the next points:
 - Use momentJS to format dates (https://momentjs.com/)
 - Use Vue-Progressbar to use a nice progress bar (http://hilongjw.github.io/vue-progressbar/)
 - Use Custom Event to Send HTTP Request
-- Add and configure Laravel Passport for API Auth
+- Add and configure Laravel Passport for API Auth (https://laravel.com/docs/5.8/passport)
+- Use Base64 Encoding for upload files (photo)
