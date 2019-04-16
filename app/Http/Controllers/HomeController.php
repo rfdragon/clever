@@ -24,7 +24,7 @@ class HomeController extends Controller
     public function index()
     {
         // demo toastr
-        toastr()->warning('Mensagem de Teste!', 'Titulo da Mensagem', ["timeOut" => "3000"])->success('BEM-VINDO');
+        //toastr()->warning('Mensagem de Teste!', 'Titulo da Mensagem', ["timeOut" => "3000"])->success('BEM-VINDO');
         return view('home');
     }
 }
