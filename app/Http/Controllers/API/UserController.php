@@ -75,6 +75,61 @@ class UserController extends Controller
        return auth('api')->user();
     }
 
+
+    /**
+     * Update Profile Information
+     *
+     * @param Request $request
+     *
+     * @return array
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function updateProfile(Request $request)
+    {
+       $user = auth('api')->user();
+
+        $this->validate($request, [
+            'name' => 'required|string|max:191',
+            'email' => 'required|string|email|max:191|unique:users,email,'.$user->id,
+            'password' => 'sometimes|required|min:8'
+        ]);
+
+       $currentPhoto = $user->photo;
+
+       if($request->photo != $currentPhoto) {
+
+           // prepare image name
+           $name = time().'.'.explode('/', explode(':', substr($request->photo, 0, strpos($request->photo, ';')))[1])[1];
+
+           // send image to the server
+           \Image::make($request->photo)->save(public_path('img/profile/').$name);
+
+
+
+           $userPhoto = public_path('img/profile/').$currentPhoto;
+
+           // delete old picture from server
+           if(file_exists($userPhoto)) {
+               @unlink($userPhoto);
+           }
+
+
+
+
+           $request->merge(['photo' => $name]);
+       }
+
+       if(!empty($request->password)) {
+           $request->merge(['password' => Hash::make($request->password)]);
+       }
+
+
+       // update the user/profile
+       $user->update($request->all());
+
+       return ['message' => 'Profile Updated'];
+    }
+
     /**
      * Update the specified resource in storage.
      *
