@@ -16,3 +16,4 @@ In this project I have done the next points:
 - Use Base64 Encoding for upload files (photo)
 - Use Image Intervention (http://image.intervention.io/) for edit files (photo)
 - Use Authorization Gates (https://laravel.com/docs/5.8/authorization#gates) for user permissions
+- Use Laravel Vue Pagination (https://github.com/gilbitron/laravel-vue-pagination)
