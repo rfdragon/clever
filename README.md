@@ -17,3 +17,4 @@ In this project I have done the next points:
 - Use Image Intervention (http://image.intervention.io/) for edit files (photo)
 - Use Authorization Gates (https://laravel.com/docs/5.8/authorization#gates) for user permissions
 - Use Laravel Vue Pagination (https://github.com/gilbitron/laravel-vue-pagination)
+- Use Debounce for search (https://lodash.com/docs/4.17.11#debounce) for better performance in searches
