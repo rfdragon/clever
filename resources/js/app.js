@@ -17,7 +17,6 @@ import moment from 'moment'
 
 // vue-progressbar
 import VueProgressBar from 'vue-progressbar'
-
 Vue.use(VueProgressBar, {
     color: 'rgb(143, 255, 199)',
     failedColor: 'red',
@@ -37,7 +36,6 @@ window.toast = toast;
 
 // vforms
 import {Form, HasError, AlertError} from 'vform'
-
 window.Form = Form;
 Vue.component(HasError.name, HasError)
 Vue.component(AlertError.name, AlertError)
@@ -45,22 +43,23 @@ Vue.component(AlertError.name, AlertError)
 // pagination
 Vue.component('pagination', require('laravel-vue-pagination'));
 
+// Vue Routes
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
-
 let routes = [
     {path: '/dashboard', component: require('./components/Dashboard.vue').default},
     {path: '/developer', component: require('./components/Developer.vue').default},
     {path: '/users', component: require('./components/Users.vue').default},
     {path: '/profile', component: require('./components/Profile.vue').default},
+    {path: '/print_user', component: require('./components/PrintUsers.vue').default},
     {path: '*', component: require('./components/NotFound.vue').default},
 ]
-
 const router = new VueRouter({
     mode: 'history',
     routes // short for `routes: routes`
 })
 
+// Vue Filters
 Vue.filter('textCapitalize', function(text){
     return text.charAt(0).toUpperCase() + text.slice(1);
 })
@@ -68,6 +67,7 @@ Vue.filter('myFormatDate', function(date){
     return moment(date).format('YYYY-MM-DD HH:mm:ss');
 })
 
+// Fire Events
 window.Fire = new Vue();
 
 /**
@@ -80,9 +80,6 @@ window.Fire = new Vue();
 
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
-
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-
 
 Vue.component('passport-clients', require('./components/passport/Clients.vue').default);
 Vue.component('passport-authorized-clients', require('./components/passport/AuthorizedClients.vue').default);
