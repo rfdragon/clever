@@ -31,3 +31,40 @@ In this project I have done the next points:
 
 Or you can register you're own account. Enjoy it. I hope you liked.
 
+# To start:
+
+### 1. Clone GitHub repo for this project locally
+
+Run <code>git clone https://github.com/rfdragon/clever.git</code>
+
+### 2. Cd into your project
+
+### 3. Install Composer Dependencies
+
+Run <code>composer install</code>
+
+### 4. Install NPM Dependencies
+
+Run <code>npm install</code>
+
+### 5. Create a copy of your .env file
+
+Run <code>copy .env.example .env</code>
+
+### 6. Generate an app encryption key
+
+Run <code>php artisan key:generate</code>
+
+### 7. Create an empty database for our application
+
+### 8. In the .env file, add database information to allow Laravel to connect to the database
+
+### 9. Migrate the database
+
+Run <code>php artisan migrate</code>
+
+### 10. (optional) if you get an error 500 ("... \oauth-public.key" does not exist or is not readable"), please run the next code:
+
+Run <code>php artisan passport:keys</code>
+
+
