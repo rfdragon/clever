@@ -42,17 +42,19 @@ Vue.component(AlertError.name, AlertError)
 
 // pagination
 Vue.component('pagination', require('laravel-vue-pagination'));
+window.nbrpage = 4;
 
 // Vue Routes
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 let routes = [
     {path: '/dashboard', component: require('./components/Dashboard.vue').default},
-    {path: '/developer', component: require('./components/Developer.vue').default},
+    {path: '/contacts', component: require('./components/Contacts.vue').default},
     {path: '/users', component: require('./components/Users.vue').default},
+    {path: '/developer', component: require('./components/Developer.vue').default},
     {path: '/profile', component: require('./components/Profile.vue').default},
-    {path: '/print_user', component: require('./components/PrintUsers.vue').default},
-    {path: '*', component: require('./components/NotFound.vue').default},
+    {path: '/', component: require('./components/ContactsView.vue').default},
+    {path: '/*', component: require('./components/NotFound.vue').default},
 ]
 const router = new VueRouter({
     mode: 'history',
@@ -84,7 +86,6 @@ window.Fire = new Vue();
 Vue.component('passport-clients', require('./components/passport/Clients.vue').default);
 Vue.component('passport-authorized-clients', require('./components/passport/AuthorizedClients.vue').default);
 Vue.component('passport-personal-access-tokens', require('./components/passport/PersonalAccessTokens.vue').default);
-
 Vue.component('not-found', require('./components/NotFound.vue').default);
 
 /**
@@ -98,8 +99,7 @@ window.onload = function () {
         el: '#app',
         router,
         data: {
-            search: '',
-            paginateNr: 3
+            search: ''
         },
         methods: {
             searchThis:_.debounce(() => {

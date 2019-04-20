@@ -4,10 +4,10 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Users Table</h3>
+                        <h3 class="card-title">Contacts Table</h3>
 
                         <div class="card-tools" v-if="$gate.isAdmin()">
-                            <button class="btn btn-success" @click="newModal">Add New <i class="fas fa-user-plus"></i></button>
+                            <button class="btn btn-success" @click="newModal">Add New <i class="fas fa-address-book"></i></button>
                         </div>
                     </div>
                     <!-- /.card-header -->
@@ -19,20 +19,24 @@
                                     <th>Photo</th>
                                     <th>Name</th>
                                     <th>Email</th>
-                                    <th>Type</th>
-                                    <th>Bio</th>
+                                    <th>Address</th>
+                                    <th>Phone</th>
+                                    <th>Mobile</th>
+                                    <th>Fax</th>
                                     <th>Registered at</th>
                                     <th v-if="$gate.isAdmin()">Modify</th>
                                 </tr>
-                                <tr v-for="user in users.data" :key="user.id">
-                                    <td>{{user.id}}</td>
-                                    <td><img class="img-circle table-img" :src="getPhoto(user.photo)" onerror="this.src='img/profile/profile.png'"></td>
-                                    <td>{{user.name}}</td>
-                                    <td>{{user.email}}</td>
-                                    <td>{{user.type|textCapitalize}}</td>
-                                    <td>{{user.bio}}</td>
-                                    <td>{{user.created_at|myFormatDate}}</td>
-                                    <td v-if="$gate.isAdmin()"><a @click="editModal(user)" title="Edit"><i class="fas fa-edit blue"></i></a> | <a @click="deleteUser(user.id)" title="Remove"><i class="fas fa-trash red"></i></a></td>
+                                <tr v-for="contact in contacts.data" :key="contact.id">
+                                    <td>{{contact.id}}</td>
+                                    <td><img class="img-circle table-img" :src="getPhoto(contact.photo)" ></td>
+                                    <td>{{contact.name}}</td>
+                                    <td>{{contact.email}}</td>
+                                    <td>{{contact.address}}</td>
+                                    <td>{{contact.phone}}</td>
+                                    <td>{{contact.mobile}}</td>
+                                    <td>{{contact.fax}}</td>
+                                    <td>{{contact.created_at|myFormatDate}}</td>
+                                    <td v-if="$gate.isAdmin()"><a href="#" @click="editModal(contact)" title="Edit"><i class="fas fa-edit blue"></i></a> | <a href="#" @click="deleteContact(contact.id)" title="Remove"><i class="fas fa-trash red"></i></a></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -40,7 +44,7 @@
                     <!-- /.card-body -->
 
                     <div class="card-footer">
-                        <pagination :data="users" @pagination-change-page="getResults"></pagination>
+                        <pagination :data="contacts" @pagination-change-page="getResults"></pagination>
                     </div>
                 </div>
                 <!-- /.card -->
@@ -57,12 +61,12 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 v-show="!editMode" class="modal-title" id="addNewLabel">Add New</h5>
-                        <h5 v-show="editMode" class="modal-title" id="updateUserInfoLabel">Update User Info</h5>
+                        <h5 v-show="editMode" class="modal-title" id="updateContactInfoLabel">Update Contact Info</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form @submit.prevent="editMode ? updateUser() : createUser()">
+                    <form @submit.prevent="editMode ? updateContact() : createContact()">
                         <div class="modal-body">
                             <div class="form-group">
                                 <input v-model="form.name" type="text" name="name" id="name" placeholder="Name" class="form-control" :class="{'is-invalid': form.errors.has('name')}">
@@ -73,26 +77,25 @@
                                 <has-error :form="form" field="email"></has-error>
                             </div>
                             <div class="form-group">
-                                <textarea v-model="form.bio" name="bio" id="bio" placeholder="Short bio for user (Optional)" class="form-control" :class="{'is-invalid': form.errors.has('bio')}"></textarea>
-                                <has-error :form="form" field="bio"></has-error>
+                                <textarea v-model="form.address" name="address" id="address" placeholder="Address" class="form-control" :class="{'is-invalid': form.errors.has('address')}"></textarea>
+                                <has-error :form="form" field="address"></has-error>
                             </div>
                             <div class="form-group">
-                                <select v-model="form.type" name="type" id="type" class="form-control" :class="{'is-invalid': form.errors.has('type')}">
-                                    <option value="">Select User Role</option>
-                                    <option value="admin">Admin</option>
-                                    <option value="user">Standard User</option>
-                                    <option value="author">Author</option>
-                                </select>
-                                <has-error :form="form" field="type"></has-error>
+                                <input v-model="form.phone" type="number" name="phone" id="phone" placeholder="Phone Number" class="form-control" :class="{'is-invalid': form.errors.has('phone')}">
+                                <has-error :form="form" field="phone"></has-error>
+                            </div>
+                            <div class="form-group">
+                                <input v-model="form.mobile" type="number" name="mobile" id="mobile" placeholder="Mobile Number" class="form-control" :class="{'is-invalid': form.errors.has('mobile')}">
+                                <has-error :form="form" field="phone"></has-error>
+                            </div>
+                            <div class="form-group">
+                                <input v-model="form.fax" type="number" name="fax" id="fax" placeholder="Fax Number" class="form-control" :class="{'is-invalid': form.errors.has('fax')}">
+                                <has-error :form="form" field="fax"></has-error>
                             </div>
                             <div class="form-group">
                                 <img class="modal-img" :src="getPhoto(form.photo)">
-                                <input @change="updatePhoto" type="file" name="photo" id="inputPhoto" class="form-input" :class="{'is-invalid': form.errors.has('photo')}">
+                                <input type="file" @change="updatePhoto" name="photo" id="inputPhoto" class="form-input" :class="{'is-invalid': form.errors.has('photo')}">
                                 <has-error :form="form" field="photo"></has-error>
-                            </div>
-                            <div class="form-group">
-                                <input v-model="form.password" type="password" name="password" id="password" placeholder="Password" class="form-control" :class="{'is-invalid': form.errors.has('password')}">
-                                <has-error :form="form" field="password"></has-error>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -105,6 +108,7 @@
             </div>
         </div>
         <!-- /Modal -->
+
     </div>
 </template>
 
@@ -113,23 +117,24 @@
         data() {
             return {
                 editMode: false,
-                users: {},
+                contacts: {},
                 form: new Form({
                     id: '',
+                    photo: '',
                     name: '',
                     email: '',
-                    password: '',
-                    type: '',
-                    bio: '',
-                    photo: ''
+                    address: '',
+                    phone: '',
+                    mobile: '',
+                    fax: ''
                 })
             }
         },
         methods: {
             // get user photo
             getPhoto(photoname = null) {
-                let photo = (photoname != null && photoname.length > 200) ? photoname : "img/profile/" + photoname;
-                return (photoname != null) ? photo : 'img/profile/profile.png';
+                let photo = (photoname != null && photoname.length > 200) ? photoname : "img/contact/" + photoname;
+                return (photoname != null) ? photo : 'img/contact/profile.png';
             },
             // update user photo
             updatePhoto(e) {
@@ -149,22 +154,22 @@
                     })
                 }
             },
-            // get all users (by page)
+            // get all results (by page)
             getResults(page = 1) {
-                axios.get('api/user?page=' + page)
+                axios.get('api/contact?page=' + page)
                     .then(response => {
-                        this.users = response.data;
+                        this.contacts = response.data;
                     });
             },
-            // update selected user
-            updateUser() {
+            // update defined contact
+            updateContact() {
                 this.$Progress.start();
-                this.form.put('api/user/'+this.form.id)
+                this.form.put('api/contact/'+this.form.id)
                     .then(()=>{
                         $('#addNew').modal('hide');
-                        Swal.fire('Updated!', 'This user has been updated.', 'success');// show swal successfull message
+                        Swal.fire('Updated!', 'This contact has been updated.', 'success');// show swal successfull message
                         this.$Progress.finish();
-                        Fire.$emit('LoadUsers');
+                        Fire.$emit('LoadContacts');
                     })
                     .catch(()=>{
                         this.$Progress.fail();
@@ -172,10 +177,10 @@
 
             },
             // edit modal mode
-            editModal(user) {
+            editModal(contact) {
                 this.editMode = true;
                 this.form.reset();
-                this.form.fill(user);
+                this.form.fill(contact);
                 $('#addNew').modal('show');
             },
             // new modal mode
@@ -184,14 +189,14 @@
                 this.form.reset();
                 $('#addNew').modal('show');
             },
-            // get/load all users
-            loadUsers() {
+            // load/get all contacts
+            loadContacts() {
                 if(this.$gate.isAdminOrAuthor()) {
-                    axios.get('api/user').then(({data})=>(this.users = data));
+                    axios.get('api/contact').then(({data})=>(this.contacts = data));
                 }
             },
-            // delete selected user
-            deleteUser(id) {
+            // delete defined contact
+            deleteContact(id) {
                 Swal.fire({
                     title: "Are you sure?",
                     text: "You won't be able to revert this!",
@@ -203,24 +208,24 @@
                 }).then((result)=>{
                     if(result.value) {
                         // send request to the server
-                        this.form.delete('api/user/'+id).then(()=>{
+                        this.form.delete('api/contact/'+id).then(()=>{
                             if(result.value){
-                                Swal.fire('Deleted!', 'This user has been deleted.', 'success');// show swal successfull message
+                                Swal.fire('Deleted!', 'This contact has been deleted.', 'success');// show swal successfull message
                             }
-                            Fire.$emit('LoadUsers');                                            // create event LoadUsers
+                            Fire.$emit('LoadContacts');                                            // create event LoadContacts
                         }).catch(()=>{
                             Swal.fire('Failed!', 'There was something wrong.', 'warning');      // show swal warning message
                         });
                     }
                 })
             },
-            // create new user
-            createUser() {
+            // create a new contact
+            createContact() {
                 this.$Progress.start();                                                         // start progressbar
-                this.form.post('api/user').then(()=>{
-                    Fire.$emit('LoadUsers');                                                    // create event LoadUsers
+                this.form.post('api/contact').then(()=>{
+                    Fire.$emit('LoadContacts');                                                    // create event LoadContacts
                     $('#addNew').modal('hide');                                                 // hide modal
-                    toast.fire('Add new User', 'User created in successfully', 'success');      // show toast successfull message
+                    toast.fire('Add new Contact', 'Contact created in successfully', 'success');      // show toast successfull message
                     this.$Progress.finish();                                                    // finish progressbar
                 })
                 .catch(()=>{
@@ -233,9 +238,9 @@
             Fire.$on('searching',()=>{
                 this.$Progress.start();
                 let query = this.$parent.search;
-                axios.get('api/findUser?q='+ query)
+                axios.get('api/findContact?q='+ query)
                     .then((data)=>{
-                        this.users = data.data;
+                        this.contacts = data.data;
                         this.$Progress.finish();
                     })
                     .catch(()=>{
@@ -243,8 +248,8 @@
                         this.$Progress.fail();
                     })
             });
-            this.loadUsers();
-            Fire.$on('LoadUsers',()=>{this.loadUsers()}); // will run when found a event called LoadUsers
+            this.loadContacts();
+            Fire.$on('LoadContacts',()=>{this.loadContacts()}); // will run when found a event called LoadContacts
         }
     }
 </script>

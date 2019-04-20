@@ -26,18 +26,18 @@ class UserController extends Controller
      */
     public function index()
     {
-
         if (\Gate::allows('isAdmin') || \Gate::allows('isAuthor')) {
-            return User::latest()->paginate(3);
+            return User::latest()->paginate();
         }
-
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request)
     {
@@ -46,6 +46,16 @@ class UserController extends Controller
             'email' => 'required|string|email|max:191|unique:users',
             'password' => 'required|string|min:8'
         ]);
+
+        if($request->photo !== '') {
+            // prepare image name
+            $name = time().'.'.explode('/', explode(':', substr($request->photo, 0, strpos($request->photo, ';')))[1])[1];
+
+            // send image to the server
+            \Image::make($request->photo)->save(public_path('img/profile/').$name);
+
+            $request->merge(['photo' => $name]);
+        }
 
         return User::create([
             'name' => $request['name'],
@@ -68,7 +78,6 @@ class UserController extends Controller
         //
     }
 
-
     /**
      * Return the profile information
      *
@@ -78,7 +87,6 @@ class UserController extends Controller
     {
        return auth('api')->user();
     }
-
 
     /**
      * Update Profile Information
@@ -108,17 +116,12 @@ class UserController extends Controller
            // send image to the server
            \Image::make($request->photo)->save(public_path('img/profile/').$name);
 
-
-
-           $userPhoto = public_path('img/profile/').$currentPhoto;
+           $userPhoto = public_path('img/profile/').$name;
 
            // delete old picture from server
            if(file_exists($userPhoto) && $currentPhoto !== 'profile.png') {
-               @unlink($userPhoto);
+               @unlink($currentPhoto);
            }
-
-
-
 
            $request->merge(['photo' => $name]);
        }
@@ -126,7 +129,6 @@ class UserController extends Controller
        if(!empty($request->password)) {
            $request->merge(['password' => Hash::make($request->password)]);
        }
-
 
        // update the user/profile
        $user->update($request->all());
@@ -137,9 +139,11 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Reques $request
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function update(Request $request, $id)
     {
@@ -151,6 +155,26 @@ class UserController extends Controller
             'password' => 'sometimes|min:8'
         ]);
 
+        $currentPhoto = $user->photo;
+
+        if($request->photo != $currentPhoto) {
+
+            // prepare image name
+            $name = time().'.'.explode('/', explode(':', substr($request->photo, 0, strpos($request->photo, ';')))[1])[1];
+
+            // send image to the server
+            \Image::make($request->photo)->save(public_path('img/profile/').$name);
+
+            $userPhoto = public_path('img/profile/').$name;
+
+            // delete old picture from server
+            if(file_exists($userPhoto) && $currentPhoto !== 'profile.png') {
+                @unlink($currentPhoto);
+            }
+
+            $request->merge(['photo' => $name]);
+        }
+
         // update the user
         $user->update($request->all());
 
@@ -160,15 +184,22 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function destroy($id)
     {
-
         $this->authorize('isAdmin');
 
         $user = User::findOrFail($id);
+
+        // delete the photo from server
+        $userPhoto = public_path('img/profile/').$user->photo;
+        if(file_exists($userPhoto) && $user->photo !== 'profile.png') {
+            @unlink($userPhoto);
+        }
 
         // delete the user
         $user->delete();
@@ -177,6 +208,11 @@ class UserController extends Controller
         return['message' => 'User Deleted'];
     }
 
+    /**
+     * Search for specific user by name, email or type
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function search()
     {
         $users = '';

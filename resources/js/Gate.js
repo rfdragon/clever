@@ -24,4 +24,8 @@ export default class Gate {
         return (this.user.type === 'author' || this.user.type === 'admin') ? true : false;
     }
 
+    isLogged() {
+        return (typeof this.user !== 'undefined') ? true : false;
+    }
+
 }

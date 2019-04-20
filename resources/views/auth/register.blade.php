@@ -71,6 +71,12 @@
                     </form>
                 </div>
             </div>
+            <p class="text-center">To use our demo account, please use the next data to access:<br>
+                <b>Admin:</b> admin@demo.pt | 123456789<br>
+                <b>Author:</b> author@demo.pt | 123456789<br>
+                <b>User:</b> user@demo.pt | 123456789<br><br>
+                Or you can register you're own account. Enjoy it. I hope you liked.
+            </p>
         </div>
     </div>
 </div>
