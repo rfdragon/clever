@@ -19,3 +19,15 @@ In this project I have done the next points:
 - Use Laravel Vue Pagination (https://github.com/gilbitron/laravel-vue-pagination)
 - Use Debounce for search (https://lodash.com/docs/4.17.11#debounce) for better performance in searches
 - Use Laravel Page Speed (https://github.com/renatomarinho/laravel-page-speed) to compress HTML and load faster
+
+
+## To use our demo account, please use the next data to access:
+
+**Admin: admin@demo.pt | 123456789**
+
+**Author: author@demo.pt | 123456789**
+
+**User: user@demo.pt | 123456789**
+
+Or you can register you're own account. Enjoy it. I hope you liked.
+
